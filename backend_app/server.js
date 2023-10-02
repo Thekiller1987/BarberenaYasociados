@@ -32,6 +32,3 @@ app.listen(port,()=>{
     console.log(`Servidor backend en funcionamiento en el puerto ${port}`);
 
 });
-
-const crudRoutes = require('./routes/crudRoutes.js')(db);
-app.use('/crud', crudRoutes);
