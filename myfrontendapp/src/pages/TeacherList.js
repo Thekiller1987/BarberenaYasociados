@@ -114,7 +114,7 @@ function TeacherList() {
 
       <Card className="m-3">
         <Card.Body>
-          <Card.Title className="mb-3">Listado de Docente</Card.Title>
+          <Card.Title className="mb-3">Listado </Card.Title>
           <Table striped bordered hover>
             <thead>
               <tr>

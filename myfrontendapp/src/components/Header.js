@@ -38,17 +38,17 @@ function Header() {
                 </NavDropdown.Item>
  
                 <NavDropdown.Item>
-                  <Link to="/actualizar-caso" className="link-unstyled">Listar Casos</Link>
+                  <Link to="/actualizar" className="link-unstyled">Listar Casos</Link>
                 </NavDropdown.Item>
               </NavDropdown>
 
               <NavDropdown title="abogados" id="abogados">
                 <NavDropdown.Item>
-                  <Link to="/abog" className="link-unstyled">Registrar abogados</Link>
+                  <Link to="/Teacher" className="link-unstyled">Registrar abogados</Link>
                 </NavDropdown.Item>
 
                 <NavDropdown.Item>
-                  <Link to="/abogList" className="link-unstyled">Listar abogados</Link>
+                  <Link to="/TeacherList" className="link-unstyled">Listar abogados</Link>
                 </NavDropdown.Item>
               </NavDropdown>
 
@@ -94,7 +94,7 @@ function Header() {
 
             <NavDropdown title="Abogados" id="abogados">
               <NavDropdown.Item>
-                <Link to="/abog" className="link-unstyled">Registrar Abogados</Link>
+                <Link to="/abogados" className="link-unstyled">Registrar Abogados</Link>
               </NavDropdown.Item>
 
               <NavDropdown.Item>

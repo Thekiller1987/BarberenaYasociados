@@ -3,17 +3,17 @@ import { Form, Row, Col, Container, FloatingLabel, Card, Button } from 'react-bo
 import Header from '../components/Header';
 import '../styles/App.css';
 
-function Teacher() {
+function Abogado() {
 
   // Crear un estado para cada campo del formulario
-  const [Nombres, setNombres] = useState('');
-  const [Apellidos, setApellidos] = useState('');
-  const [Fecha_Nacimiento, setFechaNacimiento] = useState('');
-  const [Direccion, setDireccion] = useState('');
-  const [Genero, setGenero] = useState('');
-  const [Telefono, setTelefono] = useState('');
-  const [Correo, setCorreo] = useState('');
-  const [Especialidad, setEspecialidad] = useState('');
+  const [nombre, setNombres] = useState('');
+  const [apellido, setApellidos] = useState('');
+  const [fecha_de_nacimiento, setFechaNacimiento] = useState('');
+  const [genero, setGenero] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [especialidad, setEspecialidad] = useState('');
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
@@ -21,19 +21,19 @@ function Teacher() {
 
     // Crear un objeto con los datos del formulario
     const formData = {
-      Nombres,
-      Apellidos,
-      Fecha_Nacimiento,
-      Direccion,
-      Genero,
-      Telefono,
-      Correo,
-      Especialidad,
+      nombre,
+      apellido,
+      fecha_de_nacimiento,
+      direccion,
+      genero,
+      telefono,
+      correo,
+      especialidad,
     };
 
     try {
       // Realizar una solicitud HTTP al backend para enviar los datos
-      const response = await fetch('http://localhost:5000/crud/creatabog', {
+      const response = await fetch('http://localhost:5000/crud/createabog', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,33 +74,33 @@ function Teacher() {
               <Row className="g-3">
 
                 <Col sm="6" md="6" lg="4">
-                  <FloatingLabel controlId="nombres" label="Nombres">
+                  <FloatingLabel controlId="nombre" label="Nombres">
                     <Form.Control
                       type="text"
                       placeholder="Ingrese los nombres"
-                      value={Nombres}
+                      value={nombre}
                       onChange={(e) => setNombres(e.target.value)}
                     />
                   </FloatingLabel>
                 </Col>
 
                 <Col sm="6" md="6" lg="4">
-                  <FloatingLabel controlId="apellidos" label="Apellidos">
+                  <FloatingLabel controlId="apellido" label="Apellidos">
                     <Form.Control
                       type="text"
                       placeholder="Ingrese los apellidos"
-                      value={Apellidos}
+                      value={apellido}
                       onChange={(e) => setApellidos(e.target.value)}
                     />
                   </FloatingLabel>
                 </Col>
 
                 <Col sm="12" md="6" lg="4">
-                  <FloatingLabel controlId="fechaNacimiendo" label="Fecha de nacimiento">
+                  <FloatingLabel controlId="fecha_de_nacimiendo" label="Fecha de nacimiento">
                     <Form.Control 
                       type="date" 
                       placeholder="Seleccione la fecha de nacimiento"
-                      value={Fecha_Nacimiento}
+                      value={fecha_de_nacimiento}
                       onChange={(e) => setFechaNacimiento(e.target.value)} 
                     />
                   </FloatingLabel>
@@ -110,7 +110,7 @@ function Teacher() {
                   <FloatingLabel controlId="genero" label="Género">
                     <Form.Select 
                       aria-label="Genero"
-                      value={Genero}
+                      value={genero}
                       onChange={(e) => setGenero(e.target.value)}
                     >
                       <option>Seleccione el género</option>
@@ -125,7 +125,7 @@ function Teacher() {
                     <Form.Control 
                       type="text" 
                       placeholder="Ingrese la dirección"
-                      value={Direccion}
+                      value={direccion}
                       onChange={(e) => setDireccion(e.target.value)} 
                     />
                   </FloatingLabel>
@@ -136,7 +136,7 @@ function Teacher() {
                     <Form.Control 
                       type="number" 
                       placeholder="Ingrese el teléfono"
-                      value={Telefono}
+                      value={telefono}
                       onChange={(e) => setTelefono(e.target.value)} 
                     />
                   </FloatingLabel>
@@ -147,23 +147,23 @@ function Teacher() {
                     <Form.Control 
                       type="email" 
                       placeholder="Ingrese el correo"
-                      value={Correo}
+                      value={correo}
                       onChange={(e) => setCorreo(e.target.value)} 
                     />
                   </FloatingLabel>
                 </Col>  
 
                 <Col sm="12" md="6" lg="4">
-                  <FloatingLabel controlId="Especialidad" label="Especialidad">
+                  <FloatingLabel controlId="especialidad" label="Especialidad">
                     <Form.Select 
                       aria-label="Especialidad"
-                      value={Especialidad}
+                      value={especialidad}
                       onChange={(e) => setEspecialidad(e.target.value)}
                     >
                       <option>Seleccione la especialidad</option>
-                      <option value="Matemáticas">divorcio</option>
-                      <option value="Historia">Juiciod</option>
-                      <option value="Geografía">papeleria</option>
+                      <option value="divorcio">divorcio</option>
+                      <option value="juici">Juicios</option>
+                      <option value="papl">papeleria</option>
                     </Form.Select>
                   </FloatingLabel>
                 </Col>
@@ -183,4 +183,4 @@ function Teacher() {
   );
 }
 
-export default Teacher;
+export default Abogado;
