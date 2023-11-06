@@ -8,27 +8,35 @@ const port = 5000;
 // Middleware para analizar el cuerpo de la solicitud en formato JSON
 app.use(express.json());
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '0524',
-    database: 'abogados_firma'
+// Configuración de CORS
+app.use(cors());
 
+// Conexión a la base de datos MySQL
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '1987',
+  database: 'abogados_firma'
 });
 
 db.connect((err) => {
-    if (err) {
-        console.error('Error de conexión a la base de datos:', err);
-    } else {
-        console.error('Conexión exitosa a la base de datos');
-    }
+  if (err) {
+    console.error('Error de conexión a la base de datos:', err);
+  } else {
+    console.log('Conexión exitosa a la base de datos');
+  }
 });
 
-app.use(cors());
-
-const crudRoutes = require('./routes/CrudRoutes.js')(db); //Pasa la instancia de la base de datos a crudRoutes
+// Importar las rutas CRUD
+const crudRoutes = require('./routes/CrudRoutes.js');
 app.use('/crud', crudRoutes);
 
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.send('¡Servidor backend en funcionamiento!');
+});
+
+// Iniciar el servidor en el puerto especificado
 app.listen(port, () => {
-    console.log(`Servidor backend en funcionamiento en el puerto ${port}`);
+  console.log(`Servidor backend en funcionamiento en el puerto ${port}`);
 });
