@@ -1,67 +1,62 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql');
 
-// Configuración de la conexión a la base de datos MySQL
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1987',
-  database: 'abogados_firma'
-});
 
-// Conectar a la base de datos
-db.connect((err) => {
-  if (err) {
-    console.error('Error de conexión a la base de datos:', err);
-  } else {
-    console.log('Conexión exitosa a la base de datos');
-  }
-});
 
-// Middleware para parsear JSON
-router.use(express.json());
+module.exports = (db) => {
 
 // Rutas CRUD para la tabla "Abogados"
-
 router.post('/insertarabogado', (req, res) => {
+  // Recibe los datos del nuevo abogado desde el cuerpo de la solicitud (req.body)
   const {
     nombre,
     apellido,
+    area_especializacion,
     fechaNacimiento,
     genero,
     direccion,
     telefono,
     correo,
-    especialidad,
+    num_carnet,
     imagen
   } = req.body;
 
-  // Verificar que los campos obligatorios no sean nulos o vacíos
-  if (!nombre || !apellido || !fechaNacimiento || !genero || !direccion || !telefono || !correo || !especialidad) {
+  // Verifica si se proporcionaron los datos necesarios
+  if (!nombre || !apellido || !fechaNacimiento || !genero || !direccion || !telefono || !correo || !area_especializacion || !num_carnet) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
-  // Verificar si se proporcionó una imagen
-  let imagenUrl = null;
-  if (imagen && imagen.length > 0) {
-    // Guardar la imagen en el servidor o en un servicio de almacenamiento en la nube
-    // y obtener la URL de la imagen para almacenarla en la base de datos
-    // Ejemplo: imagenUrl = guardarImagenEnServidor(imagen);
-  }
+  // Realiza la consulta SQL para insertar un nuevo registro en la tabla "Abogados"
+  const abogadoSql = `
+      INSERT INTO Abogados (nombre, apellido, fecha_nacimiento, genero, direccion, telefono, correo_electronico,num_carnet ,area_especializacion, imagen)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+  `;
+  const abogadoValues = [nombre, apellido, fechaNacimiento, genero, direccion, telefono, correo, num_carnet,area_especializacion, imagen];
 
-  db.query(
-    'INSERT INTO Abogados (nombre, apellido, fecha_nacimiento, genero, direccion, telefono, correo_electronico, especialidad, imagen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [nombre, apellido, fechaNacimiento, genero, direccion, telefono, correo, especialidad, imagenUrl],
-    (err, result) => {
+  // Ejecuta la consulta para insertar en la tabla "Abogados"
+  db.query(abogadoSql, abogadoValues, (err, abogadoResult) => {
       if (err) {
-        console.error('Error al insertar abogado:', err);
-        res.status(500).json({ error: 'Error al insertar abogado' });
+          console.error('Error al insertar abogado:', err);
+          res.status(500).json({ error: 'Error al insertar abogado' });
       } else {
-        res.status(200).json({ message: 'Abogado insertado exitosamente' });
+          // Devuelve un mensaje de éxito como respuesta
+          res.status(200).json({ message: 'Abogado insertado exitosamente' });
       }
+  });
+});
+
+
+router.get('/readAbogado', (req, res) => {
+  const sql = 'SELECT * FROM Abogados';
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error al leer registros de Abogados:', err);
+      res.status(500).json({ error: 'Error al leer registros de Abogados' });
+    } else {
+      res.status(200).json(result);
     }
-  );
+  });
 });
 
 // Ruta para actualizar un abogado por ID
@@ -98,19 +93,30 @@ router.put('/actualizarabogado/:id', (req, res) => {
   );
 });
 
-// Ruta para eliminar un abogado por ID
-router.delete('/eliminarabogado/:id', (req, res) => {
-  const id = req.params.id;
 
-  db.query('CALL EliminarAbogado(?)', [id], (err, result) => {
-    if (err) {
-      console.error('Error al eliminar abogado:', err);
-      res.status(500).json({ error: 'Error al eliminar abogado' });
-    } else {
-      res.status(200).json({ message: 'Abogado eliminado exitosamente' });
-    }
+router.delete('/deleteAbogado/:id', (req, res) => {
+  // Obtén el ID del registro a eliminar desde los parámetros de la URL
+  const id = req.params.id;
+  // Realiza la consulta SQL para eliminar el registro por ID
+  const sql = 'DELETE FROM abogados WHERE id_abogado = ?';
+  // Ejecuta la consulta
+  db.query(sql, [id], (err, result) => {
+      if (err) {
+          console.error('Error al eliminar el registro:', err);
+          res.status(500).json({ error: 'Error al eliminar el registro' });
+      } else {
+          // Devuelve un mensaje de éxito
+          res.status(200).json({ message: 'Registro eliminado con éxito' });
+      }
   });
 });
+
+
+
+
+
+
+
 // Rutas CRUD para la tabla "Clientes"
 
 // Ruta para leer registros de la tabla Clientes
@@ -271,4 +277,6 @@ router.delete('/deletecasos/:id_caso', (req, res) => {
   });
 });
 
-module.exports = router;
+return router;
+
+};
