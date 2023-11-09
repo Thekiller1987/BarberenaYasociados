@@ -34,11 +34,11 @@ function Header() {
 
               <NavDropdown title="Casos" id="Casos">
                 <NavDropdown.Item>
-                  <Link to="/customer" className="link-unstyled">Registrar Casos</Link>
+                  <Link to="/Casos" className="link-unstyled">Registrar Casos</Link>
                 </NavDropdown.Item>
  
                 <NavDropdown.Item>
-                  <Link to="/actualizar" className="link-unstyled">Listar Casos</Link>
+                  <Link to="/CasoList" className="link-unstyled">Listar Casos</Link>
                 </NavDropdown.Item>
               </NavDropdown>
 
