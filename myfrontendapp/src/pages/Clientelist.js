@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal } from 'react-bootstrap';
+import Header from '../components/Header';
 
 function ClientList() {
   const [clientes, setClientes] = useState([]);
@@ -38,7 +39,7 @@ function ClientList() {
   };
 
   const handleUpdate = () => {
-    fetch(`http://localhost:5000/crud/updateclientes/${selectedCliente.idClientes}`, {
+    fetch(`http://localhost:5000/updateclientes/${selectedCliente.idClientes}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ function ClientList() {
   const handleDelete = (idClientes) => {
     const confirmation = window.confirm('¿Seguro que deseas eliminar este cliente?');
     if (confirmation) {
-      fetch(`http://localhost:5000/crud/deleteclientes/${idClientes}`, {
+      fetch(`http://localhost:5000/deleteclientes/${idClientes}`, {
         method: 'DELETE',
       })
         .then((response) => {
@@ -75,6 +76,7 @@ function ClientList() {
 
   return (
     <div>
+       <Header />
       <h1>Listado de Clientes</h1>
 
       <Table striped bordered hover>

@@ -116,7 +116,7 @@ router.delete('/deleteAbogado/:id', (req, res) => {
   router.post('/createclientes', (req, res) => {
     const { nombre, correo, telefono } = req.body;
   
-    if (!nombre) {
+    if (!nombre || !correo || !telefono) {
       return res.status(400).json({ error: 'El nombre es obligatorio' });
     }
   
@@ -188,6 +188,102 @@ router.delete('/deleteAbogado/:id', (req, res) => {
       }
     });
   });
+
+// Rutas CRUD para la tabla "Caso"
+router.post('/insertcasos', (req, res) => {
+  const {
+    descripcion,
+    fecha_inicio,
+    fecha_finalizacion,
+    costo_servicio,
+    abogados_id_abogado,
+    clientes_id_clientes,
+    estado,
+    
+  } = req.body;
+
+  // Verifica si se proporcionaron los datos necesarios
+  if (!descripcion || !fecha_inicio || !fecha_finalizacion || !costo_servicio || !abogados_id_abogado || !clientes_id_clientes) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  }
+
+  // Realiza la consulta SQL para insertar un nuevo registro en la tabla "Abogados"
+  const casosSql = `
+      INSERT INTO casos (descripcion, fecha_inicio, fecha_finalizacion, costo_servicio, abogados_id_abogado, clientes_id_clientes, estado)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  const casosValues = [descripcion, fecha_inicio, fecha_finalizacion, costo_servicio, abogados_id_abogado, clientes_id_clientes, estado];
+
+  // Ejecuta la consulta para insertar en la tabla "Abogados"
+  db.query(casosSql, casosValues, (err, casoResult) => {
+      if (err) {
+          console.error('Error al insertar caso:', err);
+          res.status(500).json({ error: 'Error al insertar caso' });
+      } else {
+          // Devuelve un mensaje de éxito como respuesta
+          res.status(200).json({ message: 'caso insertado exitosamente' });
+      }
+  });
+});
+
+// Ruta para actualizar un registro existente en la tabla Casos por ID
+router.put('/updatecasos/:idCasos', (req, res) => {
+  const idCasos = req.params.idCasos;
+  const { descripcion, fecha_inicio, fecha_finalizacion, costo_servicio, abogados_id_abogado, clientes_id_clientes, estado } = req.body;
+
+  if (!descripcion || !fecha_inicio || !fecha_finalizacion || !costo_servicio || !abogados_id_abogado || !clientes_id_clientes || !estado) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  }
+
+  const sql = `
+    UPDATE Casos
+    SET descripcion = ?, fecha_inicio = ?, fecha_finalizacion = ?, costo_servicio = ?, abogados_id_abogado = ?, clientes_id_clientes = ?, estado = ?
+    WHERE idCasos = ?
+  `;
+
+  const values = [descripcion, fecha_inicio, fecha_finalizacion, costo_servicio, abogados_id_abogado, clientes_id_clientes, estado, idCasos];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el registro en Casos:', err);
+      res.status(500).json({ error: 'Error al actualizar el registro en Casos' });
+    } else {
+      res.status(200).json({ message: 'Caso actualizado exitosamente' });
+    }
+  });
+});
+
+// Ruta para eliminar un registro existente en la tabla Casos por ID
+router.delete('/deletecasos/:idCasos', (req, res) => {
+  const idCasos = req.params.idCasos;
+
+  const sql = 'DELETE FROM Casos WHERE idCasos = ?';
+
+  db.query(sql, [idCasos], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar el registro en Casos:', err);
+      res.status(500).json({ error: 'Error al eliminar el registro en Casos' });
+    } else {
+      res.status(200).json({ message: 'Caso eliminado exitosamente' });
+    }
+  });
+});
+
+// Ruta para leer registros de la tabla Casos
+router.get('/readcasos', (req, res) => {
+  const sql = 'SELECT * FROM Casos';
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error al leer registros de casos:', err);
+      res.status(500).json({ error: 'Error al leer registros de casos' });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+
 
 return router;
 
