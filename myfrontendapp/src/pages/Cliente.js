@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Row, Col, Container, FloatingLabel, Card, Button } from 'react-bootstrap';
 import Header from '../components/Header';
 
-function Cliente() {
+function Cliente({rol}) {
   const [nombre, setNombre] = useState('');
   const [correo, setCorreo] = useState('');
   const [telefono, setTelefono] = useState('');
@@ -44,7 +44,7 @@ function Cliente() {
 };
   return (
     <div>
-      <Header />
+       <Header rol={rol} />
       <Container>
         <Card className="mt-3">
           <Card.Body>
@@ -52,10 +52,10 @@ function Cliente() {
             <Form className="mt-3" onSubmit={handleSubmit}>
               <Row className="g-3">
                 <Col sm="6" md="6" lg="6">
-                  <FloatingLabel controlId="nombre" label="Nombre">
+                  <FloatingLabel controlId="nombre" label="Ingrese el nombre completo">
                     <Form.Control
                       type="text"
-                      placeholder="Ingrese el nombre"
+                      placeholder="Ingrese el nombre completo"
                       value={nombre}
                       onChange={(e) => setNombre(e.target.value)}
                     />

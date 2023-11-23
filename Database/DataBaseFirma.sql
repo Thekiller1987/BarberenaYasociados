@@ -58,9 +58,7 @@ CREATE TABLE Testimonio (
     fecha_testimonio DATE NOT NULL,
     puntuacion INT NOT NULL,
     testimonio VARCHAR(100) NOT NULL,
-    idClientes INT,
-    FOREIGN KEY (idClientes) REFERENCES clientes(idClientes)
-);
+)
 
 CREATE TABLE bitacora (
   id_bitacora INT NOT NULL AUTO_INCREMENT,

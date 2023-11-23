@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Row, Col, Container, FloatingLabel, Card, Button } from 'react-bootstrap';
 import Header from '../components/Header';
 
-function Abogado() {
+function Abogado({rol}) {
   const [nombre, setnombre] = useState('');
   const [apellido, setapellido] = useState('');
   const [fechaNacimiento, setfechaNacimiento] = useState('');
@@ -90,7 +90,7 @@ function Abogado() {
   
   return (
     <div>
-      <Header />
+      <Header rol={rol} />
       <Container>
         <Card className="mt-3">
           <Card.Body>
@@ -157,7 +157,8 @@ function Abogado() {
                 <Col sm="12" md="6" lg="6">
                   <FloatingLabel controlId="telefono" label="Teléfono">
                     <Form.Control
-                      type="text"
+                      type="number"
+                      maxLength="8"
                       placeholder="Ingrese número de teléfono"
                       value={telefono}
                       onChange={(e) => settelefono(e.target.value)}
@@ -190,7 +191,7 @@ function Abogado() {
                 <Col sm="12" md="6" lg="6">
                   <FloatingLabel controlId="carnet" label="Carnet">
                     <Form.Control
-                      type="text"
+                      type="number"
                       placeholder="Ingrese el carnet"
                       value={num_carnet}
                       onChange={(e) => setnum_carnet(e.target.value)}

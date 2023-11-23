@@ -1,7 +1,7 @@
 Clientes:
 curl http://localhost:5000/crud/readclientes
-curl -X POST -H "Content-Type: application/json" -d "{\"nombre\": \"NombreCliente\", \"correo\": \"correo@cliente.com\", \"telefono\": \"123456789\", \"abogado_id\": 1}" http://localhost:5000/crud/createclientes
-curl -X PUT -H "Content-Type: application/json" -d "{\"nombre\": \"NuevoNombreCliente\", \"correo\": \"nuevo@correo.com\", \"telefono\": \"987654321\", \"abogado_id\": 2}" http://localhost:5000/crud/updateclientes/1
+curl -X POST -H "Content-Type: application/json" -d "{\"nombre\": \"NombreCliente\", \"correo\": \"correo@cliente.com\", \"telefono\": \"123456789\"}" http://localhost:5000/crud/createclientes
+curl -X PUT -H "Content-Type: application/json" -d "{\"nombre\": \"NuevoNombreCliente\", \"correo\": \"nuevo@correo.com\", \"telefono\": \"987654321\"}" http://localhost:5000/crud/updateclientes/1
 curl -X DELETE http://localhost:5000/crud/deleteclientes/1
 
 

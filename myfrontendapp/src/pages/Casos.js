@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col, FloatingLabel, Card } from 'react-bootstrap';
 import Header from '../components/Header';
 
-function Caso() {
+function Caso({rol}) {
   const [formData, setFormData] = useState({
     descripcion: '',
     fecha_inicio: '',
@@ -82,7 +82,7 @@ function Caso() {
 
   return (
     <div>
-      <Header />
+       <Header rol={rol} />
       <Container>
         <Card className="mt-3">
           <Card.Body>

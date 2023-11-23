@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal } from 'react-bootstrap';
+import { Table, Button, Card, Form, Modal, FloatingLabel, Col } from 'react-bootstrap';
+import { FaPencil } from 'react-icons/fa6';
+import { FaTrashCan } from 'react-icons/fa6';
+import {FaArrowsRotate } from 'react-icons/fa6';
+import {FaArrowRightToBracket } from 'react-icons/fa6';
 import Header from '../components/Header';
 
-function CasoList() {
+function CasoList({rol}) {
   const [casos, setCasos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCaso, setSelectedCaso] = useState({});
@@ -16,8 +20,29 @@ function CasoList() {
     estado: '',
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredCaso = casos.filter((caso) => {
+    // Convierte los valores de los campos a minúsculas para realizar una búsqueda insensible a mayúsculas y minúsculas
+    const descripcion= caso.descripcion.toLowerCase();
+    
+
+    const search = searchQuery.toLowerCase();
+  
+    // Verifica si la cadena de búsqueda se encuentra en alguno de los campos
+    return (
+      descripcion.includes(search) 
+   
+    );
+  });
+
   const openModal = (caso) => {
     setSelectedCaso(caso);
+
+    
 
     // Formatea la fecha para el campo Fecha de inicio
     const formattedFechaInicio = formatDateForInput(caso.fecha_inicio);
@@ -101,12 +126,21 @@ function CasoList() {
 
   return (
     <div>
-      <Header />
-      <h1>Listado de Casos</h1>
+       <Header rol={rol} />
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
+      <Card className="m-3">
+        <Card.Body>
+          <Card.Title className="mb-6">Listado de Caso</Card.Title>
+          <Form.Control
+            type="text"
+            placeholder="Buscar Caso"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="mb-3"
+          />
+          <Table striped bordered hover   responsive>  
+          <thead>
+        <tr>
             <th>ID</th>
             <th>Descripción</th>
             <th>Fecha de Inicio</th>
@@ -119,7 +153,7 @@ function CasoList() {
           </tr>
         </thead>
         <tbody>
-          {casos.map((caso) => (
+          {filteredCaso.map((caso) => (
             <tr key={caso.idCasos}>
               <td>{caso.idCasos}</td>
               <td>{caso.descripcion}</td>
@@ -130,17 +164,15 @@ function CasoList() {
               <td>{caso.clientes_id_clientes}</td>
               <td>{caso.estado}</td>
               <td>
-                <Button variant="primary" onClick={() => openModal(caso)}>
-                  Actualizar
-                </Button>
-                <Button variant="danger" onClick={() => handleDelete(caso.idCasos)}>
-                  Eliminar
-                </Button>
+                <Button variant="primary" onClick={() => openModal(caso)}><FaPencil /></Button>
+                <Button variant="danger" onClick={() => handleDelete(caso.idCasos)}><FaTrashCan /></Button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+          </Table>
+        </Card.Body>
+      </Card>
 
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
         <Modal.Header closeButton>
@@ -242,11 +274,11 @@ function CasoList() {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cerrar
+          <Button className='cerrar' variant="secondary" onClick={() => setShowModal(false)}>
+          <FaArrowRightToBracket />
           </Button>
           <Button variant="primary" onClick={handleUpdate}>
-            Actualizar
+          <FaArrowsRotate />
           </Button>
         </Modal.Footer>
       </Modal>

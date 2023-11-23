@@ -60,54 +60,59 @@ router.get('/readAbogado', (req, res) => {
 });
 
 // Ruta para actualizar un abogado por ID
-router.put('/actualizarabogado/:id', (req, res) => {
-  const id = req.params.id;
+router.put('/updateabogado/:id_abogado', (req, res) => {
+  const id_abogado = req.params.id_abogado;
   const {
     nombre,
     apellido,
+    area_especializacion,
     fechaNacimiento,
     genero,
     direccion,
     telefono,
     correo,
-    areaEspecializacion,
+    num_carnet,
     imagen
   } = req.body;
 
-  // Verificar que los campos obligatorios no sean nulos o vacíos
-  if (!nombre || !apellido || !fechaNacimiento || !genero || !direccion || !telefono || !correo || !areaEspecializacion) {
+  if (!nombre || !apellido || !fechaNacimiento || !genero || !direccion || !telefono || !correo || !area_especializacion || !num_carnet) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
-  db.query(
-    'CALL ActualizarAbogado(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [id, nombre, apellido, fechaNacimiento, genero, direccion, telefono, correo, areaEspecializacion, imagen],
-    (err, result) => {
-      if (err) {
-        console.error('Error al actualizar abogado:', err);
-        res.status(500).json({ error: 'Error al actualizar abogado' });
-      } else {
-        res.status(200).json({ message: 'Abogado actualizado exitosamente' });
-      }
+  const sql = `
+  UPDATE Abogados
+  SET nombre = ?, apellido = ?, area_especializacion = ?, fecha_nacimiento = ?,
+      genero = ?, direccion = ?, telefono = ?, correo_electronico = ?,
+      num_carnet = ?, imagen = ?
+  WHERE id_abogado = ?;
+  
+  `;
+
+  const values = [nombre, apellido, area_especializacion, fechaNacimiento, genero, direccion, telefono, correo, num_carnet, imagen, id_abogado];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el registro en Abogados:', err);
+      res.status(500).json({ error: 'Error al actualizar el registro en Abogados' });
+    } else {
+      res.status(200).json({ message: 'Abogado actualizado exitosamente' });
     }
-  );
+  });
 });
 
+// Ruta para eliminar un registro existente en la tabla Clientes por ID
+router.delete('/deleteAbogado/:id_abogado', (req, res) => {
+  const id_abogado = req.params.id_abogado;
 
-router.delete('/deleteAbogado/:id', (req, res) => {
-  // Obtén el ID del registro a eliminar desde los parámetros de la URL
-  const id = req.params.id;
-  // Realiza la consulta SQL para eliminar el registro por ID
   const sql = 'DELETE FROM abogados WHERE id_abogado = ?';
-  // Ejecuta la consulta
-  db.query(sql, [id], (err, result) => {
-      if (err) {
-          console.error('Error al eliminar el registro:', err);
-          res.status(500).json({ error: 'Error al eliminar el registro' });
-      } else {
-          // Devuelve un mensaje de éxito
-          res.status(200).json({ message: 'Registro eliminado con éxito' });
-      }
+
+  db.query(sql, [id_abogado], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar el registro en abogados:', err);
+      res.status(500).json({ error: 'Error al eliminar el registro en abogados' });
+    } else {
+      res.status(200).json({ message: 'abogados eliminado exitosamente' });
+    }
   });
 });
 
@@ -304,6 +309,84 @@ router.get('/readcasos', (req, res) => {
         res.json({ rol }); // Devolver el rol si las credenciales son correctas
       } else {
         res.status(401).json({ error: 'Credenciales incorrectas' });
+      }
+    });
+  });
+
+  router.get('/readtestimonios', (req, res) => {
+    const sql = 'SELECT * FROM Testimonio';
+
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error al leer registros de Testimonio:', err);
+        res.status(500).json({ error: 'Error al leer registros de Testimonio' });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  });
+
+  // Ruta para crear un nuevo registro en la tabla Testimonio
+  router.post('/createtestimonios', (req, res) => {
+    const { fecha_testimonio, testimonio, puntuacion } = req.body;
+
+    if (!fecha_testimonio || !testimonio || !puntuacion) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const sql =`INSERT INTO Testimonio (fecha_testimonio, testimonio, puntuacion) VALUES (?, ?, ?)`;
+    const values = [fecha_testimonio, testimonio, puntuacion];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al insertar registro en Testimonio:', err);
+        res.status(500).json({ error: 'Error al insertar registro en Testimonio' });
+      } else {
+        res.status(201).json({ message: 'Testimonio creado exitosamente' });
+      }
+    });
+  });
+
+  // Ruta para actualizar un registro existente en la tabla Testimonio por ID
+  router.put('/upgradetestimonios/:id_testimonio', (req, res) => {
+    const id_testimonio = req.params.id_testimonio;
+    const { fecha_testimonio, testimonio, puntuacion } = req.body;
+
+    if (!fecha_testimonio || !testimonio || !puntuacion ) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const sql = `
+    UPDATE Testimonio
+    SET fecha_testimonio = ?, testimonio = ?, puntuacion = ?
+    WHERE id_testimonio = ?    
+  `;
+ 
+  const values = [fecha_testimonio, testimonio, puntuacion, id_testimonio];
+
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error al actualizar el registro en Testimonio:', err);
+        res.status(500).json({ error: 'Error al actualizar el registro en Testimonio' });
+      } else {
+        res.status(200).json({ message: 'Testimonio actualizado exitosamente' });
+      }
+    });
+  });
+
+  // Ruta para eliminar un registro existente en la tabla Testimonio por ID
+  router.delete('/deletetestimonios/:id_testimonio', (req, res) => {
+    const id_testimonio = req.params.id_testimonio;
+
+    const sql = 'DELETE FROM Testimonio WHERE id_testimonio = ?';
+
+    db.query(sql, [id_testimonio], (err, result) => {
+      if (err) {
+        console.error('Error al eliminar el registro en Testimonio:', err);
+        res.status(500).json({ error: 'Error al eliminar el registro en Testimonio' });
+      } else {
+        res.status(200).json({ message: 'Testimonio eliminado exitosamente' });
       }
     });
   });
